@@ -1,16 +1,16 @@
 #!/bin/bash
 
 echo "enter the size of the array:"
-read N
+read -r N
 
 echo "enter array elements separated by a space:"
-read -a arr
+read -r -a arr
 
 sum=0
 for (( i=0; i < N; i++ )); do
-  (( sum += ${arr[i]} ))
+  (( sum += arr[i] ))
 done
 
 echo "sum of array elements: "
-echo $sum
+echo "$sum"
 
