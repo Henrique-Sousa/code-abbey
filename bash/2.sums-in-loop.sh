@@ -5,7 +5,7 @@ read N
 
 echo "type a pair of elements (separated by a space) for each line:"
 
-for (( i=0; i < $N; i++ )); do
+for (( i=0; i < N; i++ )); do
   read -a tmp 
   arr[$i]=$(( ${tmp[0]} + ${tmp[1]} ))
   unset tmp
