@@ -1,11 +1,11 @@
 #!/bin/bash
 
 echo "enter the number of triples to be compared:"
-read -r N
+read -r n
 
 echo "type a triple of elements (separated by spaces) for each line:"
 
-for (( i=0; i < N; i++ )); do
+for (( i=0; i < n; i++ )); do
   read -r -a tmp
   if [ "${tmp[0]}" -lt "${tmp[1]}" ]; then
     if [ "${tmp[0]}" -lt "${tmp[2]}" ]; then
