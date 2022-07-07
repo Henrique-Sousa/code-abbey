@@ -4,7 +4,7 @@ echo "input data:"
 read -r -a input
 
 max() {
-  declare -a arr=("$@")
+  declare -ia arr=("$@")
   declare -i max="${arr[0]}"
   declare -i e
 
@@ -18,7 +18,7 @@ max() {
 }
 
 min() {
-  declare -a arr=("$@")
+  declare -ia arr=("$@")
   declare -i min="${arr[0]}"
   declare -i e
 
