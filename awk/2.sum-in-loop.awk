@@ -1,5 +1,3 @@
-#!/usr/bin/awk
-
 BEGIN {
 
   print "enter array elements separated by a space:"
