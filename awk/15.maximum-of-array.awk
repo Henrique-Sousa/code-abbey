@@ -23,5 +23,6 @@ function min_of_array(arr, min, i) {
   print ""
   print "max of array", max_of_array(arr)
   print "min of array", min_of_array(arr)
+  print ""
 }
 

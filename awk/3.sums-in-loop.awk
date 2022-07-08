@@ -3,7 +3,7 @@
 }
 
 END {
-  print "answer:"
+  print "\nanswer:"
 
   for (i in arr) {
     printf "%d ", arr[i]
