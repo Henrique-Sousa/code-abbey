@@ -19,7 +19,6 @@ function min_of_array(arr, min, i) {
 BEGIN {
 
   print "input data:"
-  # number_string = "1 3 5 7 9 11 295 297 299 300 298 296 12 10 8 6 4 2"
   getline < "-"
   split($0, arr, " ")
   
