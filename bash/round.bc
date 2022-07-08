@@ -1,0 +1,12 @@
+define round(x) {
+  auto tmp_scale
+
+  if (x < 0)
+    return -round(-x)
+
+  tmp_scale = scale
+  scale = 0
+  y = (x + 0.5)/1
+  scale = tmp_scale
+  return y
+}
