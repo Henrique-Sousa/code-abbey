@@ -16,15 +16,12 @@ function min_of_array(arr, min, i) {
   return min
 }
 
-BEGIN {
+/^([0-9]{1,} ){1,}[0-9]{1,}$/ {
 
-  print "input data:"
-  getline < "-"
-  split($0, arr, " ")
+  split($0, arr, " ") 
   
   print ""
   print "max of array", max_of_array(arr)
   print "min of array", min_of_array(arr)
-
 }
 
