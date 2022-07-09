@@ -1,0 +1,11 @@
+define r(x) {
+  auto t
+
+  if (x < 0) return (-r(-x))
+
+  t = scale
+  scale = 0
+  y = (x + 0.5)/1
+  scale = t
+  return (y)
+}
