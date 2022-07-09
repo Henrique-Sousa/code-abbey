@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "enter array elements separated by a space:"
 read -r arr
