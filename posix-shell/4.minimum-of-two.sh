@@ -17,4 +17,4 @@ while [ "$i" -le "$n" ]; do
 done
 
 echo "array of minimum elements of each pair:"
-echo "$arr"
+echo "${arr# }"

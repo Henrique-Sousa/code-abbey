@@ -16,13 +16,5 @@ EOF
 done
 
 echo; echo "answer:"
+echo "${arr# }"
 
-set -- $arr
-
-i=1
-while [ "$i" -le "$n" ]; do
-  eval echo '$'$i 
-  i=$((i + 1))
-done
-
-echo

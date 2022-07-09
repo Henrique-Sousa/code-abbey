@@ -14,5 +14,5 @@ while [ "$i" -le "$n" ]; do
 done
 
 echo "array of sums:"
-echo "$arr"
+echo "${arr# }"
 
