@@ -4,20 +4,20 @@ array:
 .long 10,20,30,40,5,6,7,8
 
 size:
-.long 7
+.long 8
 
 .section .text
 
 .global _start
 _start:
   movl  $0, %edi
-  movl  array(,%edi,4), %ebx
+  movl  $0, %ebx
 
 start_loop:
   cmpl  %edi, size
   je    loop_exit
-  incl  %edi
   addl  array(,%edi,4), %ebx
+  incl  %edi
   jmp   start_loop
 
 loop_exit:
