@@ -1,4 +1,4 @@
-.section .data
+.data
 
 # answer should be: 23632
 array:
@@ -6,12 +6,12 @@ array:
 size:
 .long 37
 
-.section .bss
+.bss
 .lcomm answer, 20 
 
 .equ NEWLINE, 10
 
-.section .text
+.text
 
 .global _start
 _start:
