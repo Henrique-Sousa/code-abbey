@@ -15,24 +15,24 @@ size:
 
 .global _start
 _start:
-  movl  $0, %edi
-  movl  $0, %eax
 
-sum:
-  cmpl  %edi, size
-  je    itoa_prep  
-  addl  array(,%edi,4), %eax
-  incl  %edi
-  jmp   sum
-  
+
+# size: int
+  pushl size
+# array: pointer
+  leal  array, %eax
+  pushl %eax 
+  call array_sum
+  addl $8, %esp
+
 itoa_prep:
-  xorl %esi, %esi
+  movl $0, %esi
 itoa:
   movl $0, %edx
   movl $10, %ebx
-  divl %ebx
+  divl %ebx     # %eax = %eax / %ebx; %edx = remainder
   addl $48, %edx
-  movl %edx, answer(,%esi,1)
+  movl %edx, answer(, %esi, 1)
   incl %esi
   cmpl $0, %eax
   jz   print 
@@ -43,7 +43,7 @@ print:
   jz   print_new_line 
   decl %esi
   movl $4, %eax
-  leal answer(,%esi,1), %ecx
+  leal answer(, %esi, 1), %ecx
   movl $1, %ebx
   movl $1, %edx
   int  $0x80
@@ -61,3 +61,29 @@ exit:
   movl $1, %eax
   int  $0x80
 
+# ARGS
+# array: pointer - ebx
+# size: int - ecx
+# LOCALS
+# array index: int - edi
+# RETURN
+# sum: int - eax
+.type array_sum, @function
+array_sum:
+  pushl %ebp
+  movl  %esp, %ebp
+
+  movl  $0, %edi
+  movl  $0, %eax
+  movl  8(%ebp), %ebx
+  movl  12(%ebp), %ecx
+array_sum_loop:
+  cmpl  %edi, %ecx 
+  je    end_array_sum   # je    itoa_prep  
+  addl  (%ebx, %edi, 4), %eax  # addl  array(, %edi, 4), %eax
+  incl  %edi
+  jmp   array_sum_loop 
+end_array_sum:
+  popl %ebp
+  ret
+  
