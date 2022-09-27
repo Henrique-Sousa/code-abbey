@@ -20,8 +20,7 @@ _start:
 # size: int
   pushl size
 # array: pointer
-  leal  array, %eax
-  pushl %eax 
+  pushl $array
   call array_sum
   addl $8, %esp
 
