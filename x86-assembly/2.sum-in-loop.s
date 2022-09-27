@@ -78,11 +78,11 @@ array_sum:
   movl  12(%ebp), %ecx
 array_sum_loop:
   cmpl  %edi, %ecx 
-  je    end_array_sum   # je    itoa_prep  
-  addl  (%ebx, %edi, 4), %eax  # addl  array(, %edi, 4), %eax
+  je    end_array_sum
+  addl  (%ebx, %edi, 4), %eax
   incl  %edi
   jmp   array_sum_loop 
 end_array_sum:
   popl %ebp
   ret
-  
+
