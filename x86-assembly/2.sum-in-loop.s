@@ -17,53 +17,47 @@ size:
 _start:
 
 
-# size: int
+# amount of numbers: int
   pushl size
 # array: pointer
   pushl $array
-  call array_sum
-  addl $8, %esp
-
-itoa_prep:
-  movl $0, %esi
-itoa:
-  movl $0, %edx
-  movl $10, %ebx
-  divl %ebx     # %eax = %eax / %ebx; %edx = remainder
-  addl $48, %edx
-  movl %edx, answer(, %esi, 1)
-  incl %esi
-  cmpl $0, %eax
-  jz   print 
-  jmp  itoa 
+  call  array_sum
+  addl  $8, %esp
+  
+# answer: pointer
+  pushl $answer
+# number: int 
+  pushl %eax
+  call  itoa
+  addl  $8, %esp
 
 print:
-  cmpl $0, %esi
-  jz   print_new_line 
-  decl %esi
-  movl $4, %eax
-  leal answer(, %esi, 1), %ecx
-  movl $1, %ebx
-  movl $1, %edx
-  int  $0x80
-  jmp  print 
+  cmpl  $0, %esi
+  jz    print_new_line 
+  decl  %esi
+  movl  $4, %eax
+  leal  answer(, %esi, 1), %ecx
+  movl  $1, %ebx
+  movl  $1, %edx
+  int   $0x80
+  jmp   print 
 
 print_new_line:
-  movl $4, %eax
+  movl  $4, %eax
   pushl $NEWLINE 
-  movl %esp, %ecx 
-  movl $1, %ebx
-  movl $1, %edx
-  int  $0x80
+  movl  %esp, %ecx 
+  movl  $1, %ebx
+  movl  $1, %edx
+  int   $0x80
 
 exit:
-  movl $1, %eax
-  int  $0x80
+  movl  $1, %eax
+  int   $0x80
 
 # ARGS
 # array: pointer - ebx
 # size: int - ecx
-# LOCALS
+# OTHER 
 # array index: int - edi
 # RETURN
 # sum: int - eax
@@ -84,5 +78,34 @@ array_sum_loop:
   jmp   array_sum_loop 
 end_array_sum:
   popl %ebp
+  ret
+
+# ARGS
+# number: int - eax
+# answer: string pointer - ecx
+# OTHER 
+# index: int - esi 
+# RETURN
+# none
+.type itoa, @function
+itoa:
+  pushl %ebp
+  movl  %esp, %ebp
+
+  movl  $0, %esi
+  movl  8(%ebp), %eax
+  movl  12(%ebp), %ecx
+  movl  $10, %ebx
+itoa_loop:
+  movl  $0, %edx
+  divl  %ebx     # %eax = (%eax / %ebx); %edx = remainder
+  addl  $48, %edx
+  movl  %edx, (%ecx, %esi, 1)
+  incl  %esi
+  cmpl  $0, %eax
+  jz    end_itoa 
+  jmp   itoa_loop
+end_itoa:
+  popl  %ebp
   ret
 
