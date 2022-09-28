@@ -31,6 +31,7 @@ _start:
   call  itoa
   addl  $8, %esp
 
+  movl  %eax, %esi
 print:
   cmpl  $0, %esi
   jz    print_new_line 
@@ -41,7 +42,6 @@ print:
   movl  $1, %edx
   int   $0x80
   jmp   print 
-
 print_new_line:
   movl  $4, %eax
   pushl $NEWLINE 
@@ -82,11 +82,12 @@ end_array_sum:
 
 # ARGS
 # number: int - eax
-# answer: string pointer - ecx
+# answer: pointer (string buffer) - ecx
 # OTHER 
 # index: int - esi 
 # RETURN
-# none
+# size of answer (string): int
+# TODO: verify if the answer is not bigger than the buffer
 .type itoa, @function
 itoa:
   pushl %ebp
@@ -106,6 +107,7 @@ itoa_loop:
   jz    end_itoa 
   jmp   itoa_loop
 end_itoa:
+  movl  %esi, %eax
   popl  %ebp
   ret
 
