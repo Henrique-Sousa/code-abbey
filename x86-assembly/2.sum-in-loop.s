@@ -1,15 +1,16 @@
 .data
 
-# answer should be: 23632
+# answer should be: 23634
 array:
-.long 701, 242, 1246, 506, 29, 459, 1148, 581, 752, 1282, 810, 220, 756, 19, 114, 43, 1182, 634, 61, 164, 821, 29, 1188, 829, 1063, 928, 841, 175, 12, 1069, 1091, 595, 1048, 423, 1149, 785, 637
+.long 703, 242, 1246, 506, 29, 459, 1148, 581, 752, 1282, 810, 220, 756, 19, 114, 43, 1182, 634, 61, 164, 821, 29, 1188, 829, 1063, 928, 841, 175, 12, 1069, 1091, 595, 1048, 423, 1149, 785, 637
 size:
 .long 37
 
+newline:
+.long 10
+
 .bss
 .lcomm answer, 20 
-
-.equ NEWLINE, 10
 
 .text
 
@@ -31,24 +32,12 @@ _start:
   call  itoa
   addl  $8, %esp
 
-  movl  %eax, %esi
-print:
-  cmpl  $0, %esi
-  jz    print_new_line 
-  decl  %esi
-  movl  $4, %eax
-  leal  answer(, %esi, 1), %ecx
-  movl  $1, %ebx
-  movl  $1, %edx
-  int   $0x80
-  jmp   print 
-print_new_line:
-  movl  $4, %eax
-  pushl $NEWLINE 
-  movl  %esp, %ecx 
-  movl  $1, %ebx
-  movl  $1, %edx
-  int   $0x80
+# size: int
+  pushl %eax
+# output: string
+  pushl $answer
+  call  print
+  addl  $8, %esp
 
 exit:
   movl  $1, %eax
@@ -108,6 +97,37 @@ itoa_loop:
   jmp   itoa_loop
 end_itoa:
   movl  %esi, %eax
+  popl  %ebp
+  ret
+
+# ARGS
+# output: pointer (string) - esi
+# size: int - edi
+# RETURN - none
+.type print, @function
+print:
+  pushl %ebp
+  movl  %esp, %ebp
+
+  movl  8(%ebp), %esi
+  movl  12(%ebp), %edi
+print_loop:
+  cmpl  $0, %edi
+  jz    print_new_line 
+  decl  %edi
+  movl  $4, %eax
+  leal  (%esi, %edi, 1), %ecx
+  movl  $1, %ebx
+  movl  $1, %edx
+  int   $0x80
+  jmp   print_loop
+print_new_line:
+  movl  $4, %eax
+  movl  $newline, %ecx
+  movl  $1, %ebx
+  movl  $1, %edx
+  int   $0x80
+end_print:
   popl  %ebp
   ret
 
