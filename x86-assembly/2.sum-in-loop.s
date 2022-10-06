@@ -9,7 +9,6 @@ size:
 newline:
 .long 10
 
-.bss
 .lcomm answer, 20 
 
 .text
