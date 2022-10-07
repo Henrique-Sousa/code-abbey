@@ -1,4 +1,12 @@
+.equ  STDIN,  0
+.equ  STDOUT, 1
+
+.equ  WRITE,  4
+
 .data
+
+line_feed:
+.long 10
 
 # answer should be: 23634
 array:
@@ -6,10 +14,8 @@ array:
 size:
 .long 37
 
-newline:
-.long 10
-
-.lcomm answer, 20 
+.equ  ANSWER_SIZE,  20
+.lcomm  answer,  ANSWER_SIZE
 
 .text
 
@@ -31,16 +37,24 @@ _start:
   call  itoa
   addl  $8, %esp
 
-# size: int
-  pushl %eax
-# output: string
-  pushl $answer
-  call  print
-  addl  $8, %esp
+print:
+  movl  $STDOUT, %ebx
+  movl  $answer, %ecx
+  movl  $ANSWER_SIZE, %edx
+  movl  $WRITE, %eax
+  int   $0x80
+
+print_new_line:
+  movl  $STDOUT, %ebx
+  movl  $line_feed, %ecx
+  movl  $1, %edx
+  movl  $WRITE, %eax
+  int   $0x80
 
 exit:
   movl  $1, %eax
   int   $0x80
+
 
 # ARGS
 # array: pointer - ebx
@@ -58,75 +72,62 @@ array_sum:
   movl  $0, %eax
   movl  8(%ebp), %ebx
   movl  12(%ebp), %ecx
+
 array_sum_loop:
   cmpl  %edi, %ecx 
   je    end_array_sum
   addl  (%ebx, %edi, 4), %eax
   incl  %edi
   jmp   array_sum_loop 
+
 end_array_sum:
   popl %ebp
   ret
 
+
 # ARGS
 # number: int - eax
-# answer: pointer (string buffer) - ecx
+# answer: pointer (string buffer) where the result will be stored - ecx
 # OTHER 
 # index: int - esi 
-# RETURN
-# size of answer (string): int
 # TODO: verify if the answer is not bigger than the buffer
 .type itoa, @function
 itoa:
   pushl %ebp
   movl  %esp, %ebp
+  subl  $20, %esp # space for the temporary reversed string
 
-  movl  $0, %esi
   movl  8(%ebp), %eax
   movl  12(%ebp), %ecx
   movl  $10, %ebx
+
+  movl  $0, %esi
+
 itoa_loop:
   movl  $0, %edx
   divl  %ebx     # %eax = (%eax / %ebx); %edx = remainder
   addl  $48, %edx
-  movl  %edx, (%ecx, %esi, 1)
+  movb  %dl, (%esp, %esi, 1)
   incl  %esi
   cmpl  $0, %eax
-  jz    end_itoa 
+  jz    reverse 
   jmp   itoa_loop
+
+reverse:
+  movl  $0, %edi
+
+reverse_loop:
+  decl  %esi
+  movb  (%esp, %esi, 1), %bl
+  movb  %bl, (%ecx, %edi, 1)
+  incl  %edi
+  cmpl  $0, %esi
+  jne   reverse_loop
+
 end_itoa:
-  movl  %esi, %eax
-  popl  %ebp
-  ret
+  movl  $0, 1(%ecx, %edi, 1)
 
-# ARGS
-# output: pointer (string) - esi
-# size: int - edi
-# RETURN - none
-.type print, @function
-print:
-  pushl %ebp
-  movl  %esp, %ebp
-
-  movl  8(%ebp), %esi
-  movl  12(%ebp), %edi
-print_loop:
-  cmpl  $0, %edi
-  jz    print_new_line 
-  decl  %edi
-  movl  $4, %eax
-  leal  (%esi, %edi, 1), %ecx
-  movl  $1, %ebx
-  movl  $1, %edx
-  int   $0x80
-  jmp   print_loop
-print_new_line:
-  movl  $4, %eax
-  movl  $newline, %ecx
-  movl  $1, %ebx
-  movl  $1, %edx
-  int   $0x80
-end_print:
+  movl  %ebp, %esp
   popl  %ebp
   ret
 
