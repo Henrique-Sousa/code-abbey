@@ -136,8 +136,6 @@ reverse_loop:
     jne   reverse_loop
 
 end_itoa:
-    movl  $0, 1(%ecx, %edi, 1)
-
     movl  %ebp, %esp
     popl  %ebp
     ret
