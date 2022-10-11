@@ -22,8 +22,8 @@ array: .long 703, 242, 1246, 506, 29, 459, 1148, 581, 752, 1282, 810, 220, 756, 
 
 _start:
 
-    pushl $ARRAY_SIZE    # amount of numbers: int
-    pushl $array  # array: pointer
+    pushl $ARRAY_SIZE   # amount of numbers: int
+    pushl $array        # array: pointer
     call  array_sum
     addl  $8, %esp
     
