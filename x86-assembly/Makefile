@@ -1,4 +1,4 @@
-2.sum-in-loop.out: 2.sum-in-loop.o
+2.sum-in-loop.out: 2.sum-in-loop.o atoi.o itoa.o
 	ld -g -m elf_i386 $^ -o $@
 
 %.o: %.s

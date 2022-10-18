@@ -1,5 +1,3 @@
-.include "linux.s"
-
 # example:
 #
 # 703 242 1246 506 29 459 1148 581 752 1282 810 220 756 19 114
@@ -8,9 +6,9 @@
 #
 # the answer must be: 23634
 
+.include "linux.s"
+
 .global _start
-.type itoa, @function
-.type atoi, @function
 
 
 .equ AMMOUNT_LENGTH, 20
@@ -125,124 +123,4 @@ call_atoi_2:
 exit:
     movl  $1, %eax
     int   $LINUX_SYSCALL
-
-
-
-#******************************************************************
-atoi:
-
-#******************************
-# ARGS
-#
-# %esi = string: str
-# %edi = length: int
-#
-# OTHER 
-# %ebx = base: int (= 10)
-# %ecx = magnitude: int (1, 10, 100...)
-# %eax = temporary storage for current number
-# %edx = temporary storage for partial sum 
-#
-# RETURN
-# %eax = sum: int
-#
-#******************************
-
-.equ ST_STRING, 8
-.equ ST_STR_LEN, 12
-
-.equ ST_MAGNITUDE, -4
-.equ ST_SUM, -8
-
-    pushl %ebp
-    movl  %esp, %ebp
-
-    movl  ST_STRING(%esp), %esi
-    movl  ST_STR_LEN(%esp), %edi
-    
-    subl  $8, %esp  # 4 bytes for magnitude and 4 bytes for sum
-
-    movl  $0, ST_SUM(%ebp)
-    movl  $1, ST_MAGNITUDE(%ebp)
-    movl  $10, %ebx
-
-loop_atoi:
-    movl  $0, %eax
-    movl  $0, %edx
-    decl  %edi
-
-    movb  (%esi, %edi, 1), %al
-    subb  $48, %al  # al = al - 48 (convert ascii char to number)
-    movl  ST_MAGNITUDE(%ebp), %ecx
-    mull  %ecx  # edx:eax = eax * magnitude 
-
-    movl  ST_SUM(%ebp), %edx
-    addl  %eax, %edx      # partial sum = partial sum + current number
-    movl  %edx, ST_SUM(%ebp)  # store the partial sum on the stack
-
-    movl  %ecx, %eax  # move magnitude to eax and multiply it by 10
-    mull  %ebx
-    movl  %eax, ST_MAGNITUDE(%ebp) # store magnitude on the stack 
-    cmp   $0, %edi
-    jne   loop_atoi
-
-end_atoi:
-    movl  ST_SUM(%ebp), %eax
-    movl  %ebp, %esp
-    popl  %ebp
-    ret
-
-#******************************************************************
-itoa:
-
-#******************************
-# ARGS
-#
-# number: int - eax
-# answer: pointer (string buffer) where the result will be stored - ecx
-#
-# OTHER 
-# index: int - esi 
-#
-# TODO: verify if the answer is not bigger than the buffer
-#******************************
-
-.equ ST_NUMBER, 8
-.equ ST_ANSWER, 12
-
-    pushl %ebp
-    movl  %esp, %ebp
-    subl  $20, %esp # space for the temporary reversed string
-
-    movl  ST_NUMBER(%ebp), %eax
-    movl  ST_ANSWER(%ebp), %ecx
-    movl  $10, %ebx
-
-    movl  $0, %esi
-
-itoa_loop:
-    movl  $0, %edx
-    divl  %ebx     # %eax = (%eax / %ebx); %edx = remainder
-    addl  $48, %edx
-    movb  %dl, (%esp, %esi, 1)
-    incl  %esi
-    cmpl  $0, %eax
-    jz    reverse 
-    jmp   itoa_loop
-
-reverse:
-    movl  $0, %edi
-
-reverse_loop:
-    decl  %esi
-    movb  (%esp, %esi, 1), %bl
-    movb  %bl, (%ecx, %edi, 1)
-    incl  %edi
-    cmpl  $0, %esi
-    jne   reverse_loop
-
-end_itoa:
-    movl  %ebp, %esp
-    popl  %ebp
-    ret
 
