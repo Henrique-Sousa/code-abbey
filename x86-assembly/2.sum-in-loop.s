@@ -1,3 +1,5 @@
+.include "linux.s"
+
 # example:
 #
 # 703 242 1246 506 29 459 1148 581 752 1282 810 220 756 19 114
@@ -10,13 +12,6 @@
 .type itoa, @function
 .type atoi, @function
 
-.equ STDIN, 0
-.equ STDOUT, 1
-.equ READ, 3
-.equ WRITE, 4
-
-.equ LINE_FEED, 0x0A
-.equ SPACE, 0x20
 
 .equ AMMOUNT_LENGTH, 20
 .equ INPUT_NUMBER_LENGTH, 20
@@ -44,11 +39,11 @@ _start:
     # read ammount of numbers
     movl  $0, %edi
 loop_read_ammount:
-    movl  $READ, %eax
+    movl  $SYS_READ, %eax
     movl  $STDIN, %ebx
     leal  ammount_string(%edi, 1), %ecx
     movl  $1, %edx    # one character at a time
-    int   $0x80
+    int   $LINUX_SYSCALL
 
     cmpb  $LINE_FEED, ammount_string(%edi, 1)
     je    call_atoi 
@@ -76,11 +71,11 @@ read_numbers:
 
 loop_read_numbers:
     incl  %edi
-    movl  $READ, %eax
+    movl  $SYS_READ, %eax
     movl  $STDIN, %ebx
     leal  input_number_string(%edi, 1), %ecx
     movl  $1, %edx
-    int   $0x80
+    int   $LINUX_SYSCALL
 
     cmpb  $LINE_FEED, input_number_string(%edi, 1)
     je    call_atoi_2
@@ -117,19 +112,19 @@ call_atoi_2:
     movl  $STDOUT, %ebx
     movl  $answer_string, %ecx
     movl  $ANSWER_LENGTH, %edx
-    movl  $WRITE, %eax
-    int   $0x80
+    movl  $SYS_WRITE, %eax
+    int   $LINUX_SYSCALL
 
     # print_new_line
     movl  $STDOUT, %ebx
     movl  $line_feed, %ecx
     movl  $1, %edx
-    movl  $WRITE, %eax
-    int   $0x80
+    movl  $SYS_WRITE, %eax
+    int   $LINUX_SYSCALL
 
 exit:
     movl  $1, %eax
-    int   $0x80
+    int   $LINUX_SYSCALL
 
 
 
