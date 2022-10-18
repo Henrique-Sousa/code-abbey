@@ -139,27 +139,32 @@ atoi:
 #
 # OTHER 
 # %ebx = base: int (= 10)
-# %ecx, -4(%ebp) = magnitude: int (1, 10, 100...)
+# %ecx = magnitude: int (1, 10, 100...)
 # %eax = temporary storage for current number
 # %edx = temporary storage for partial sum 
 #
 # RETURN
-# %eax, -8(%ebp) = sum: int
+# %eax = sum: int
 #
 #******************************
+
+.equ ST_STRING, 8
+.equ ST_STR_LEN, 12
+
+.equ ST_MAGNITUDE, -4
+.equ ST_SUM, -8
 
     pushl %ebp
     movl  %esp, %ebp
 
-    movl  8(%esp), %esi # string
-    movl  12(%esp), %edi # string length
+    movl  ST_STRING(%esp), %esi
+    movl  ST_STR_LEN(%esp), %edi
     
+    subl  $8, %esp  # 4 bytes for magnitude and 4 bytes for sum
 
-    movl  $1, -4(%ebp) # store magnitude on the stack 
+    movl  $0, ST_SUM(%ebp)
+    movl  $1, ST_MAGNITUDE(%ebp)
     movl  $10, %ebx
-
-    subl  $8, %esp
-    movl  $0, -8(%ebp)
 
 loop_atoi:
     movl  $0, %eax
@@ -168,21 +173,21 @@ loop_atoi:
 
     movb  (%esi, %edi, 1), %al
     subb  $48, %al  # al = al - 48 (convert ascii char to number)
-    movl  -4(%ebp), %ecx  # move magnitude to ecx
+    movl  ST_MAGNITUDE(%ebp), %ecx
     mull  %ecx  # edx:eax = eax * magnitude 
 
-    movl  -8(%ebp), %edx  # move partial sum to edx
+    movl  ST_SUM(%ebp), %edx
     addl  %eax, %edx      # partial sum = partial sum + current number
-    movl  %edx, -8(%ebp)  # store the partial sum on the stack
+    movl  %edx, ST_SUM(%ebp)  # store the partial sum on the stack
 
     movl  %ecx, %eax  # move magnitude to eax and multiply it by 10
     mull  %ebx
-    movl  %eax, -4(%ebp) # store magnitude on the stack 
+    movl  %eax, ST_MAGNITUDE(%ebp) # store magnitude on the stack 
     cmp   $0, %edi
     jne   loop_atoi
 
 end_atoi:
-    movl  -8(%ebp), %eax  # move sum to eax
+    movl  ST_SUM(%ebp), %eax
     movl  %ebp, %esp
     popl  %ebp
     ret
@@ -202,12 +207,15 @@ itoa:
 # TODO: verify if the answer is not bigger than the buffer
 #******************************
 
+.equ ST_NUMBER, 8
+.equ ST_ANSWER, 12
+
     pushl %ebp
     movl  %esp, %ebp
     subl  $20, %esp # space for the temporary reversed string
 
-    movl  8(%ebp), %eax
-    movl  12(%ebp), %ecx
+    movl  ST_NUMBER(%ebp), %eax
+    movl  ST_ANSWER(%ebp), %ecx
     movl  $10, %ebx
 
     movl  $0, %esi
