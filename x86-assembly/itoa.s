@@ -20,15 +20,15 @@ itoa:
 # TODO: verify if the answer is not bigger than the buffer
 #******************************
 
-.equ ST_NUMBER, 8
-.equ ST_ANSWER, 12
+.equ NUMBER, 8
+.equ ANSWER, 12
 
     pushl %ebp
     movl  %esp, %ebp
     subl  $20, %esp # space for the temporary reversed string
 
-    movl  ST_NUMBER(%ebp), %eax
-    movl  ST_ANSWER(%ebp), %ecx
+    movl  NUMBER(%ebp), %eax
+    movl  ANSWER(%ebp), %ecx
     movl  $10, %ebx
 
     movl  $0, %esi
