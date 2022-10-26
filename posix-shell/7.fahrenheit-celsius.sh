@@ -17,4 +17,3 @@ for e in $input; do
 done
 
 echo "$arr"
-

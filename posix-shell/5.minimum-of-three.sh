@@ -26,4 +26,3 @@ done
 
 echo "array of minimum elements of each triple:"
 echo "${arr# }"
-

@@ -33,4 +33,3 @@ min() {
 
 echo "answer:"
 echo $(max "${input[@]}"; min "${input[@]}")
-

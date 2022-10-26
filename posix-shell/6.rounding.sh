@@ -17,4 +17,3 @@ done
 
 echo; echo "answer:"
 echo "${arr# }"
-

@@ -25,4 +25,3 @@ function min_of_array(arr, min, i) {
   print "min of array", min_of_array(arr)
   print ""
 }
-

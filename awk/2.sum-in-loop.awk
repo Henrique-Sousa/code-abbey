@@ -14,4 +14,3 @@ function sum_array(arr, sum) {
   print "sum of array elements: "
   print sum_array(arr), "\n"
 }
-

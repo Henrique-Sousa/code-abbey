@@ -10,4 +10,3 @@ for my $e (@arr) {
 
 print "answer:\n";
 print "$sum\n";
-

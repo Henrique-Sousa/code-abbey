@@ -15,4 +15,3 @@ done
 
 echo "array of sums:"
 echo "${arr# }"
-

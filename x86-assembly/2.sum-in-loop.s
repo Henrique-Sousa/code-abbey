@@ -123,4 +123,3 @@ call_atoi_2:
 exit:
     movl  $1, %eax
     int   $LINUX_SYSCALL
-

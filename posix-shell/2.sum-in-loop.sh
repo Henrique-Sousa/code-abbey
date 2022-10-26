@@ -10,4 +10,3 @@ done
 
 echo "sum of array elements: "
 echo "$sum"
-

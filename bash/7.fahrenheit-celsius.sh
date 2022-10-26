@@ -18,4 +18,3 @@ done
 
 echo "answer:"
 echo "${arr[@]}"
-

@@ -30,4 +30,3 @@ min() {
 echo; echo "answer:"
 echo "max: $(max $input)"
 echo "min: $(min $input)"
-

@@ -58,4 +58,3 @@ end_itoa:
     movl  %ebp, %esp
     popl  %ebp
     ret
-
