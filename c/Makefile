@@ -2,7 +2,10 @@ CFLAGS = -g
 LDFLAGS = -g
 CC = gcc
 
-all: 2.sum-in-loop.out 3.sums-in-loop.out 4.minimum-of-two.out
+all: 2.sum-in-loop.out 3.sums-in-loop.out 4.minimum-of-two.out 5.minimum-of-three.out
+
+5.minimum-of-three.out: 5.minimum-of-three.o
+	$(CC) $^ -o $@ $(LDFLAGS)
 
 4.minimum-of-two.out: 4.minimum-of-two.o
 	$(CC) $^ -o $@ $(LDFLAGS)
