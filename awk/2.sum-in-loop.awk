@@ -1,16 +1,29 @@
 function sum_array(arr, sum) {
   for (i in arr) {
-    sum += arr[i]
+    sum += arr[i];
   }
 
-  return sum
+  return sum;
 }
 
-/^((-)?[0-9]{1,} ){1,}(-)?[0-9]{1,}$/ {
 
-  split($0, arr)
+BEGIN {
+    print "input data:";
+}
 
-  print "" 
-  print "sum of array elements: "
-  print sum_array(arr), "\n"
+
+/^[0-9]{1,}$/ {
+    n = $0;
+}
+
+
+{
+  if ($0 ~ "^((-)?[0-9]{1,} ){"(n-1)","(n-1)"}(-)?[0-9]{1,1}$") {
+      split($0, arr)
+
+      print "\nanswer:";
+      print sum_array(arr);
+
+      exit;
+  }
 }
