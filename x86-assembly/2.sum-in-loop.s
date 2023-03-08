@@ -31,11 +31,11 @@ _start:
 loop_read_ammount:
     movl  $SYS_READ, %eax
     movl  $STDIN, %ebx
-    leal  ammount_string(%edi, 1), %ecx
+    leal  ammount_string(%edi), %ecx
     movl  $1, %edx    # one character at a time
     int   $LINUX_SYSCALL
 
-    cmpb  $LINE_FEED, ammount_string(%edi, 1)
+    cmpb  $LINE_FEED, ammount_string(%edi)
     je    call_atoi 
 
     cmpl  $AMMOUNT_LENGTH, %edi
@@ -63,18 +63,18 @@ loop_read_numbers:
     incl  %edi
     movl  $SYS_READ, %eax
     movl  $STDIN, %ebx
-    leal  input_number_string(%edi, 1), %ecx
+    leal  input_number_string(%edi), %ecx
     movl  $1, %edx
     int   $LINUX_SYSCALL
 
-    cmpb  $LINE_FEED, input_number_string(%edi, 1)
+    cmpb  $LINE_FEED, input_number_string(%edi)
     je    call_atoi_2
 
-    cmpb  $SPACE, input_number_string(%edi, 1)
+    cmpb  $SPACE, input_number_string(%edi)
     jne   loop_read_numbers 
 
 call_atoi_2:
-    movb  $0, input_number_string(%edi, 1)
+    movb  $0, input_number_string(%edi)
 
     pushl %esi                  # store %esi on the stack before call
     pushl %edi                  # input_number_string length

@@ -48,7 +48,7 @@ loop_atoi:
     movl  $0, %edx
     decl  %edi
 
-    movb  (%esi, %edi, 1), %al
+    movb  (%esi, %edi), %al
     subb  $48, %al  # al = al - 48 (convert ascii char to number)
     movl  MAGNITUDE(%ebp), %ecx
     mull  %ecx  # edx:eax = eax * magnitude 

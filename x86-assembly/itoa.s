@@ -37,7 +37,7 @@ itoa_loop:
     movl  $0, %edx
     divl  %ebx     # %eax = (%eax / %ebx); %edx = remainder
     addl  $48, %edx
-    movb  %dl, (%esp, %esi, 1)
+    movb  %dl, (%esp, %esi)
     incl  %esi
     cmpl  $0, %eax
     jz    reverse 
@@ -48,8 +48,8 @@ reverse:
 
 reverse_loop:
     decl  %esi
-    movb  (%esp, %esi, 1), %bl
-    movb  %bl, (%ecx, %edi, 1)
+    movb  (%esp, %esi), %bl
+    movb  %bl, (%ecx, %edi)
     incl  %edi
     cmpl  $0, %esi
     jne   reverse_loop
